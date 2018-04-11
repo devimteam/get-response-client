@@ -1,0 +1,13 @@
+{
+    "name": "devimteam/get-response-client",
+    "description": "Wrapper over GetResponse.com requests",
+    "type": "lib",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "sergey.cherkesov",
+            "email": "sergey.cherkasov@devim.team"
+        }
+    ],
+    "require": {}
+}
