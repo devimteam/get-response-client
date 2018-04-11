@@ -1,13 +1,18 @@
 {
-    "name": "devimteam/get-response-client",
-    "description": "Wrapper over GetResponse.com requests",
-    "type": "lib",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "sergey.cherkesov",
-            "email": "sergey.cherkasov@devim.team"
-        }
-    ],
-    "require": {}
+  "name": "devimteam/get-response-client",
+  "description": "Wrapper over GetResponse.com requests",
+  "type": "lib",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "sergey.cherkesov",
+      "email": "sergey.cherkasov@devim.team"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "DevimTeam\\GetResponseClient\\": "/src"
+    }
+  }
 }
