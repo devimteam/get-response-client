@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "symfony/options-resolver": "2.8.38"
+    "symfony/options-resolver": "*"
   },
   "autoload": {
     "psr-4": {
