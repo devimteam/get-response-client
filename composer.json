@@ -9,7 +9,9 @@
       "email": "sergey.cherkasov@devim.team"
     }
   ],
-  "require": {},
+  "require": {
+    "symfony/options-resolver": "2.8.38"
+  },
   "autoload": {
     "psr-4": {
       "DevimTeam\\GetResponseClient\\": "/src"
