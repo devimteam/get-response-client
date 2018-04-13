@@ -1,6 +1,6 @@
 # get-response-client
 
-PHP client for GetResponse.com API
+PHP client for [GetResponse.com]() API
 
 ### Useful links
 
