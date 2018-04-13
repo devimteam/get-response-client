@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class ContactsResource
  * @package DevimTeam\GetResponseClient\Request
  *
- * @method  setCustomFields($id)
+ * @method  setCustomFields($options)
  */
 class ContactsResource extends AbstractRESTResource
 {
@@ -21,11 +21,6 @@ class ContactsResource extends AbstractRESTResource
 
     public function getObjectTypes(string $actionName): array
     {
-        /*if ('setCustomFields' == $actionName) {
-            return [CustomFieldsModel::class];
-        }
-        return ['object'];*/
-
         return [
             Contact::class,
         ];
@@ -68,12 +63,24 @@ class ContactsResource extends AbstractRESTResource
 
     public function getResponseModelType(string $actionName)
     {
-        /*if ('setCustomFields' == $actionName) {
-            return CustomFieldsModel::class;
-        } else {
-            return parent::getResponseModelType($actionName);
-        }*/
-
+        if ('list' == $actionName) {
+            return sprintf('array<%s>', Contact::class);
+        }
         return Contact::class;
+    }
+
+    /**
+     * @param string $email
+     * @return array
+     */
+    public function getByEmail(string $email)
+    {
+        /** @var string $method */
+        /** @var string $url */
+        /** @var mixed $parameters */
+        /** @var string $responseModelType */
+        list($method, $url, $parameters, $responseModelType) = $this->list();;
+        $parameters['query'] = ['email' => $email];
+        return [$method, $url, $parameters, $responseModelType];
     }
 }

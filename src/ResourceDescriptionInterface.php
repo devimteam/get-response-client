@@ -45,7 +45,7 @@ interface ResourceDescriptionInterface
     /**
      * @param string $actionName
      * @param array $options
-     * @return array
+     * @return mixed
      */
     public function getRequestParameters(string $actionName, array $options = []);
 

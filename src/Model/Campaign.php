@@ -4,30 +4,30 @@ namespace DevimTeam\GetResponseClient\Model;
 
 use JMS\Serializer\Annotation as Serializer;
 
-class Tag
+class Campaign
 {
     /**
      * @var string
      *
      * @Serializer\Type("string")
      */
-    private $tagId;
+    private $campaignId;
 
     /**
      * @return string
      */
-    public function getTagId(): string
+    public function getCampaignId(): string
     {
-        return $this->tagId;
+        return $this->campaignId;
     }
 
     /**
-     * @param string $tagId
-     * @return Tag
+     * @param string $campaignId
+     * @return Campaign
      */
-    public function setTagId(string $tagId): Tag
+    public function setCampaignId(string $campaignId): Campaign
     {
-        $this->tagId = $tagId;
+        $this->campaignId = $campaignId;
         return $this;
     }
 }

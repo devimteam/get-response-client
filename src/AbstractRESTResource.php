@@ -91,25 +91,30 @@ abstract class AbstractRESTResource implements ResourceDescriptionInterface
     /**
      * @param string $actionName
      * @param array $options
-     * @return array
+     * @return mixed
      */
-    public function getRequestParameters(string $actionName, array $options = []): array
+    public function getRequestParameters(string $actionName, array $options = [])
     {
-        return [];
+        if (in_array($actionName, ['list', 'get',])) {
+            return null;
+        }
+        return $options[self::OPTION_OBJECT_NAME];
     }
 
     public function __call($name, $arguments)
     {
-        if (1 == count($arguments) && is_object($arguments[0])) {
-            $arguments = [self::OPTION_OBJECT_NAME => $arguments[0]];
+        if (count($arguments) == 1 && is_array($arguments[0])) {
+            $options = $arguments[0];
+        } elseif (1 == count($arguments) && is_object($arguments[0])) {
+            $options = [self::OPTION_OBJECT_NAME => $arguments[0]];
+        } else {
+            $options = [];
         }
-
 
         $resolver = new OptionsResolver();
         $this->configureOptions($name, $resolver);
-        $options = $resolver->resolve($arguments);
-//        print_r($options);
-//        die;
+        $options = $resolver->resolve($options);
+
         return [
             $this->getHttpMethod($name, $options),
             $this->getUri($name, $options),
