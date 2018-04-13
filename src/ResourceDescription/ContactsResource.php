@@ -2,8 +2,8 @@
 
 namespace DevimTeam\GetResponseClient\ResourceDescription;
 
-use DevimTeam\GetResponseClient\AbstractResource;
-use DevimTeam\GetResponseClient\Model\Contacts\CustomFieldsModel;
+use DevimTeam\GetResponseClient\AbstractRESTResource;
+use DevimTeam\GetResponseClient\Model\Contact;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -12,60 +12,68 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @method  setCustomFields($id)
  */
-class ContactsResource extends AbstractResource
+class ContactsResource extends AbstractRESTResource
 {
-    const BASE_URI = '/contacts';
+    public function getUriPrefix(): string
+    {
+        return '/contacts';
+    }
 
-    public function configureOptions($actionName, OptionsResolver $resolver)
+    public function getObjectTypes(string $actionName): array
+    {
+        /*if ('setCustomFields' == $actionName) {
+            return [CustomFieldsModel::class];
+        }
+        return ['object'];*/
+
+        return [
+            Contact::class,
+        ];
+    }
+
+    public function configureOptions(string $actionName, OptionsResolver $resolver): void
     {
         if ('setCustomFields' == $actionName) {
             $resolver
-                ->setAllowedTypes('contactId', 'string')
-                ->setAllowedTypes('fields', 'array')
-                ->setRequired([
-                    'contactId',
-                    'fields',
-                ]);
+                ->setRequired(self::OPTION_IDENTIFIER_NAME)
+                ->setAllowedTypes(self::OPTION_IDENTIFIER_NAME, $this->getIdentifierTypes())
+                ->setRequired(self::OPTION_OBJECT_NAME)
+                ->setAllowedTypes(self::OPTION_OBJECT_NAME, $this->getObjectTypes($actionName));
+        } else {
+            parent::configureOptions($actionName, $resolver);
         }
     }
 
-    public function getURL($actionName, $options = [])
+    public function getUri(string $actionName, array $options = []): ?string
     {
-        $pr = parent::getURL($actionName, $options);
-        if ($pr) {
-            return self::BASE_URI . $pr;
-        }
         if ('setCustomFields' == $actionName) {
             return sprintf(
                 '%s/%s/custom-fields',
-                self::BASE_URI,
-                $options['contactId']
+                $this->getUriPrefix(),
+                $options[self::OPTION_IDENTIFIER_NAME]
             );
+        } else {
+            return parent::getUri($actionName, $options);
         }
-        return null;
     }
 
-    public function getHttpMethod($actionName)
+    public function getHttpMethod(string $actionName, array $options = []): ?string
     {
-        $pm = parent::getHttpMethod($actionName);
-        if ($pm) {
-            return $pm;
-        }
         if ('setCustomFields' == $actionName) {
             return self::HTTP_METHOD_POST;
+        } else {
+            return parent::getHttpMethod($actionName);
         }
-
-        return self::HTTP_METHOD_GET;
     }
 
-    public function getRequestParameters($actionName, $options = [])
+    public function getResponseModelType(string $actionName)
     {
-    }
-
-    public function getResponseModelType($actionName)
-    {
-        if ('setCustomFields' == $actionName) {
+        /*if ('setCustomFields' == $actionName) {
             return CustomFieldsModel::class;
-        }
+        } else {
+            return parent::getResponseModelType($actionName);
+        }*/
+
+        return Contact::class;
     }
 }

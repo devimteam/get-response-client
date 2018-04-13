@@ -10,7 +10,8 @@
     }
   ],
   "require": {
-    "symfony/options-resolver": "*"
+    "symfony/options-resolver": "^4.0",
+    "jms/serializer": "^1.11"
   },
   "autoload": {
     "psr-4": {

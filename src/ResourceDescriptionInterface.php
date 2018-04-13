@@ -27,31 +27,31 @@ interface ResourceDescriptionInterface
      * @param OptionsResolver $resolver
      * @return void
      */
-    public function configureOptions($actionName, OptionsResolver $resolver);
+    public function configureOptions(string $actionName, OptionsResolver $resolver): void;
 
     /**
      * @param string $actionName
      * @param array $options
      * @return null|string
      */
-    public function getURL($actionName, $options = []);
+    public function getUri(string $actionName, array $options = []);
 
     /**
      * @param string $actionName
      * @return null|string
      */
-    public function getHttpMethod($actionName);
+    public function getHttpMethod(string $actionName, array $options = []);
 
     /**
      * @param string $actionName
      * @param array $options
-     * @return void|array
+     * @return array
      */
-    public function getRequestParameters($actionName, $options = []);
+    public function getRequestParameters(string $actionName, array $options = []);
 
     /**
      * @param string $actionName
      * @return string
      */
-    public function getResponseModelType($actionName);
+    public function getResponseModelType(string $actionName);
 }
