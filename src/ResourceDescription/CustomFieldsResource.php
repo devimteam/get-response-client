@@ -41,19 +41,4 @@ class CustomFieldsResource extends AbstractRESTResource
         }
         return CustomField::class;
     }
-
-    /**
-     * @param string $name
-     * @return array
-     */
-    public function getByName(string $name)
-    {
-        /** @var string $method */
-        /** @var string $url */
-        /** @var mixed $parameters */
-        /** @var string $responseModelType */
-        list($method, $url, $parameters, $responseModelType) = $this->list();;
-        $parameters['query'] = ['name' => $name];
-        return [$method, $url, $parameters, $responseModelType];
-    }
 }

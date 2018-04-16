@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class ContactsResource
  * @package DevimTeam\GetResponseClient\Request
  *
- * @method  setCustomFields($options)
+ * @method  setCustomFields(array $options)
  */
 class ContactsResource extends AbstractRESTResource
 {
