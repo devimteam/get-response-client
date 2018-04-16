@@ -10,6 +10,8 @@ use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 
 class Client
 {
+    const HTTP_STATUS_CODES_IGNORE_MALFORMED_JSON_BODY = [200, 201, 202];
+
     /** @var string */
     private $apiKey;
 
@@ -27,7 +29,7 @@ class Client
      * @return mixed
      * @throws ApiException
      * @throws ApiException2
-     * @throws RuntimeException
+     *
      */
     public function run($build)
     {
@@ -85,23 +87,42 @@ class Client
             $output = curl_error($ch);
         }
 
-//        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 //        $headers = curl_getinfo($ch, CURLINFO_HEADER_OUT);
+
+//        var_dump($output);die;
 
         curl_close($ch);
 
         $result = null;
 
-        $result = $serializer->deserialize($output, ApiException::class, 'json');
-        if ($result instanceof ApiException && $result->getCode() > 0) {
-            throw $result;
+        try {
+            $result = $serializer->deserialize($output, ApiException::class, 'json');
+            if ($result instanceof ApiException && $result->getCode() > 0) {
+                throw $result;
+            }
+        } catch (RuntimeException $exception) {
         }
 
-        $result = $serializer->deserialize($output, ApiException2::class, 'json');
-        if ($result instanceof ApiException2 && $result->getCode() > 0) {
-            throw $result;
+        try {
+            $result = $serializer->deserialize($output, ApiException2::class, 'json');
+            if ($result instanceof ApiException2 && $result->getCode() > 0) {
+                throw $result;
+            }
+        } catch (RuntimeException $exception) {
         }
 
-        return $serializer->deserialize($output, $responseModelType, 'json');
+        try {
+            return $serializer->deserialize($output, $responseModelType, 'json');
+        } catch (RuntimeException $exception) {
+            if (!in_array(
+                $responseCode,
+                self::HTTP_STATUS_CODES_IGNORE_MALFORMED_JSON_BODY
+            )) {
+                // suppress exception if server serve request and did not sending response back
+                throw $exception;
+            }
+            return true;
+        }
     }
 }

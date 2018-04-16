@@ -68,19 +68,4 @@ class ContactsResource extends AbstractRESTResource
         }
         return Contact::class;
     }
-
-    /**
-     * @param string $email
-     * @return array
-     */
-    public function getByEmail(string $email)
-    {
-        /** @var string $method */
-        /** @var string $url */
-        /** @var mixed $parameters */
-        /** @var string $responseModelType */
-        list($method, $url, $parameters, $responseModelType) = $this->list();;
-        $parameters['query'] = ['email' => $email];
-        return [$method, $url, $parameters, $responseModelType];
-    }
 }

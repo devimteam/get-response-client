@@ -103,6 +103,8 @@ abstract class AbstractRESTResource implements ResourceDescriptionInterface
 
     public function __call($name, $arguments)
     {
+//        print_r($arguments);die;
+
         if (count($arguments) == 1 && is_array($arguments[0])) {
             $options = $arguments[0];
         } elseif (1 == count($arguments) && is_object($arguments[0])) {
