@@ -72,9 +72,14 @@ class ContactsService
             /** @var Contact $contact */
             $contact = $arguments[0];
             $newFields = [];
+//            var_dump($contact->getCustomFieldValues());die;
             foreach ($contact->getCustomFieldValues() as $field) {
                 if (empty($field->getCustomFieldId()) && !empty($field->getName())) {
                     $newField = $fieldsService->getByName($field->getName());
+                    if (null == $newField) {
+                        $newFields[] = $field;
+                        continue;
+                    }
                     $newField->setValues($field->getValues());
                     $newFields[] = $newField;
                 } else {
