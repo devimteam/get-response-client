@@ -63,10 +63,18 @@ class CustomFieldsService
             return $this->fieldsCache[$arguments[0]];
         }
 
+        /*if (!isset($arguments[0])) {
+            $arguments[0] = [];
+        }*/
+
         if ('getByName' == $name) {
             $build = $this->__getByName($arguments[0]);
         } else {
-            $build = $this->resource->$name($arguments[0]);
+//            $build = $this->resource->$name($arguments[0]);
+            $build = call_user_func_array(
+                array($this->resource, $name),
+                $arguments
+            );
         }
 
         try {
