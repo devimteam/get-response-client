@@ -7,14 +7,14 @@ use JMS\Serializer\Annotation as Serializer;
 class Contact
 {
     /**
-     * @var string
+     * @var null|string
      *
      * @Serializer\Type("string")
      */
     private $contactId;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @Serializer\Type("string")
      */
@@ -35,14 +35,14 @@ class Contact
     private $email;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @Serializer\Type("string")
      */
     private $note;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @Serializer\Type("string")
      */
@@ -106,7 +106,7 @@ class Contact
     private $customFieldValues = [];
 
     /**
-     * @var string
+     * @var null|string
      *
      * @Serializer\Type("string")
      */
@@ -120,36 +120,36 @@ class Contact
     private $createdOn;
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getContactId(): string
+    public function getContactId(): ?string
     {
         return $this->contactId;
     }
 
     /**
-     * @param string $contactId
+     * @param null|string $contactId
      * @return Contact
      */
-    public function setContactId(string $contactId): Contact
+    public function setContactId(?string $contactId): Contact
     {
         $this->contactId = $contactId;
         return $this;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getHref(): string
+    public function getHref(): ?string
     {
         return $this->href;
     }
 
     /**
-     * @param string $href
+     * @param null|string $href
      * @return Contact
      */
-    public function setHref(string $href): Contact
+    public function setHref(?string $href): Contact
     {
         $this->href = $href;
         return $this;
@@ -192,36 +192,36 @@ class Contact
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getNote(): string
+    public function getNote(): ?string
     {
         return $this->note;
     }
 
     /**
-     * @param string $note
+     * @param null|string $note
      * @return Contact
      */
-    public function setNote(string $note): Contact
+    public function setNote(?string $note): Contact
     {
         $this->note = $note;
         return $this;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getOrigin(): string
+    public function getOrigin(): ?string
     {
         return $this->origin;
     }
 
     /**
-     * @param string $origin
+     * @param null|string $origin
      * @return Contact
      */
-    public function setOrigin(string $origin): Contact
+    public function setOrigin(?string $origin): Contact
     {
         $this->origin = $origin;
         return $this;
@@ -372,18 +372,18 @@ class Contact
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getIpAddress(): string
+    public function getIpAddress(): ?string
     {
         return $this->ipAddress;
     }
 
     /**
-     * @param string $ipAddress
+     * @param null|string $ipAddress
      * @return Contact
      */
-    public function setIpAddress(string $ipAddress): Contact
+    public function setIpAddress(?string $ipAddress): Contact
     {
         $this->ipAddress = $ipAddress;
         return $this;
