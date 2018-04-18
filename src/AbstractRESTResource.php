@@ -6,10 +6,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @method  list($options = [])
- * @method  get($options = [])
- * @method  create($options = [])
- * @method  update($options = [])
- * @method  delete($options = [])
+ * @method  get(mixed $id)
+ * @method  create(object $object)
+ * @method  update(mixed $id, object $object)
+ * @method  delete(mixed $id)
  */
 abstract class AbstractRESTResource implements ResourceDescriptionInterface
 {
@@ -107,15 +107,25 @@ abstract class AbstractRESTResource implements ResourceDescriptionInterface
 
         if (count($arguments) == 1 && is_array($arguments[0])) {
             $options = $arguments[0];
+        } elseif (2 == count($arguments)
+            && false == is_object($arguments[0])
+            && true == is_object($arguments[1])
+        ) {
+            $options = [
+                self::OPTION_IDENTIFIER_NAME => $arguments[0],
+                self::OPTION_OBJECT_NAME => $arguments[1],
+            ];
         } elseif (1 == count($arguments) && is_object($arguments[0])) {
             $options = [self::OPTION_OBJECT_NAME => $arguments[0]];
+        } elseif (1 == count($arguments) && false == is_object($arguments[0])) {
+            $options = [self::OPTION_IDENTIFIER_NAME => $arguments[0]];
         } else {
             $options = [];
         }
 
-        $resolver = new OptionsResolver();
-        $this->configureOptions($name, $resolver);
-        $options = $resolver->resolve($options);
+//        $resolver = new OptionsResolver();
+//        $this->configureOptions($name, $resolver);
+//        $options = $resolver->resolve($options);
 
         return [
             $this->getHttpMethod($name, $options),

@@ -11,13 +11,13 @@ use DevimTeam\GetResponseClient\ResourceDescription\CustomFieldsResource;
  * Class CustomFieldsService
  * @package DevimTeam\GetResponseClient\Service
  *
- * @method CustomField[] list($options = [])
- * @method CustomField get($options = [])
- * @method bool create($options = [])
- * @method CustomField update($options = [])
- * @method void delete($options = [])
+ * @method CustomField[] list()
+ * @method CustomField get(string $id)
+ * @method bool create(CustomField $customField)
+ * @method CustomField update(string $id, CustomField $customField)
+ * @method void delete(string $id)
  *
- * @method CustomField getByName(string $email)
+ * @method CustomField getByName(string $name)
  */
 class CustomFieldsService
 {
@@ -100,5 +100,18 @@ class CustomFieldsService
         }
 
         return $result;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getAllNames()
+    {
+        $all = $this->list();
+        $res = [];
+        foreach ($all as $field) {
+            $res[] = $field->getName();
+        }
+        return $res;
     }
 }

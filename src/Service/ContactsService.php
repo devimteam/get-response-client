@@ -14,11 +14,11 @@ use DevimTeam\GetResponseClient\ResourceDescription\ContactsResource;
  * Class ContactService
  * @package DevimTeam\GetResponseClient\ResourceDescription
  *
- * @method Contact[] list($options = [])
- * @method Contact get($options = [])
- * @method bool create($options = [])
- * @method Contact update($options = [])
- * @method void delete($options = [])
+ * @method Contact[] list()
+ * @method Contact get(string $id)
+ * @method bool create(Contact $contact)
+ * @method Contact update(string $id, Contact $contact)
+ * @method void delete(string $id)
  * @method Contact setCustomFields(Contact $contacts)
  *
  * @method Contact getByEmail(string $email)
