@@ -11,7 +11,7 @@
   ],
   "require": {
     "symfony/options-resolver": "^3.4",
-    "jms/serializer": "^1.11"
+    "jms/serializer": "*"
   },
   "autoload": {
     "psr-4": {
