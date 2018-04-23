@@ -372,6 +372,16 @@ class Contact
     }
 
     /**
+     * @param CustomField $customFieldValue
+     * @return Contact
+     */
+    public function addCustomFieldValue(CustomField $customFieldValue)
+    {
+        $this->customFieldValues[] = $customFieldValue;
+        return $this;
+    }
+
+    /**
      * @return null|string
      */
     public function getIpAddress(): ?string
