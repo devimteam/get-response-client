@@ -164,4 +164,13 @@ class ApiException extends \Exception
         $this->uuid = $uuid;
         return $this;
     }
+
+    public function getContextAsString(): string
+    {
+        $r = "";
+        foreach ($this->getContext() as $item) {
+            $r .= $item->getErrorDescription() . PHP_EOL;
+        }
+        return $r;
+    }
 }
