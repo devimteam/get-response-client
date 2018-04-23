@@ -169,7 +169,7 @@ class ApiException extends \Exception
     {
         $r = "";
         foreach ($this->getContext() as $item) {
-            $r .= $item->getFieldName() . " = " . $item->getErrorDescription() . PHP_EOL;
+            $r .= implode(', ', $item->getFieldName()) . " = " . $item->getErrorDescription() . PHP_EOL;
         }
         return $r;
     }
