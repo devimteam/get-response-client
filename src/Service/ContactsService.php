@@ -99,7 +99,10 @@ class ContactsService
                 AbstractRESTResource::OPTION_OBJECT_NAME => $arguments[0],
             ]);
         } else {
-            $build = $this->resource->$name($arguments[0]);
+            $build = call_user_func_array(
+                array($this->resource, $name),
+                $arguments
+            );
         }
 
         try {
