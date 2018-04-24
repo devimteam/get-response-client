@@ -17,7 +17,7 @@ use DevimTeam\GetResponseClient\ResourceDescription\ContactsResource;
  * @method Contact[] list()
  * @method Contact get(string $id)
  * @method bool create(Contact $contact)
- * @method Contact update(string $id, Contact $contact)
+ * @method Contact update(Contact $contact)
  * @method void delete(string $id)
  * @method Contact setCustomFields(Contact $contacts)
  *
@@ -65,31 +65,39 @@ class ContactsService
      */
     public function __call($name, $arguments)
     {
-        // decorate custom fields with their ids
-        $fieldsService = new CustomFieldsService($this->client);
-        /** @var Contact $contact */
-        $contact = $arguments[0];
-        $newFields = [];
-        foreach ($contact->getCustomFieldValues() as $field) {
-            if (empty($field->getCustomFieldId()) && !empty($field->getName())) {
-                $newField = $fieldsService->getByName($field->getName());
-                if (null == $newField) {
-                    $newFields[] = $field;
-                    continue;
-                }
-                $newField->setValues($field->getValues());
-                $newFields[] = $newField;
-            } else {
-                $newFields[] = $field;
+        for ($i = 0; $i < count($arguments); $i++) {
+            if (!($arguments[$i] instanceof Contact)) {
+                continue;
             }
+
+            /** @var Contact $contact */
+            $contact = $arguments[$i];
+
+            // decorate custom fields with their ids
+            $fieldsService = new CustomFieldsService($this->client);
+
+            $newFields = [];
+            foreach ($contact->getCustomFieldValues() as $field) {
+                if (empty($field->getCustomFieldId()) && !empty($field->getName())) {
+                    $newField = $fieldsService->getByName($field->getName());
+                    if (null == $newField) {
+                        $newFields[] = $field;
+                        continue;
+                    }
+                    $newField->setValues($field->getValues());
+                    $newFields[] = $newField;
+                } else {
+                    $newFields[] = $field;
+                }
+            }
+            $contact->setCustomFieldValues($newFields);
+            $arguments[$i] = $contact;
         }
-        $contact->setCustomFieldValues($newFields);
-        $arguments[0] = $contact;
 
 
         if ('getByEmail' == $name) {
             $build = $this->__getByEmail($arguments[0]);
-        } elseif ('setCustomFields' == $name) {
+        } elseif ('setCustomFields' == $name || 'update' == $name) {
             $build = $this->resource->setCustomFields([
                 AbstractRESTResource::OPTION_IDENTIFIER_NAME => $arguments[0]->getContactId(),
                 AbstractRESTResource::OPTION_OBJECT_NAME => $arguments[0],
