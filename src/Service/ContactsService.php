@@ -66,29 +66,25 @@ class ContactsService
     public function __call($name, $arguments)
     {
         // decorate custom fields with their ids
-        if ('setCustomFields' == $name) {
-            $fieldsService = new CustomFieldsService($this->client);
-
-            /** @var Contact $contact */
-            $contact = $arguments[0];
-            $newFields = [];
-//            var_dump($contact->getCustomFieldValues());die;
-            foreach ($contact->getCustomFieldValues() as $field) {
-                if (empty($field->getCustomFieldId()) && !empty($field->getName())) {
-                    $newField = $fieldsService->getByName($field->getName());
-                    if (null == $newField) {
-                        $newFields[] = $field;
-                        continue;
-                    }
-                    $newField->setValues($field->getValues());
-                    $newFields[] = $newField;
-                } else {
+        $fieldsService = new CustomFieldsService($this->client);
+        /** @var Contact $contact */
+        $contact = $arguments[0];
+        $newFields = [];
+        foreach ($contact->getCustomFieldValues() as $field) {
+            if (empty($field->getCustomFieldId()) && !empty($field->getName())) {
+                $newField = $fieldsService->getByName($field->getName());
+                if (null == $newField) {
                     $newFields[] = $field;
+                    continue;
                 }
+                $newField->setValues($field->getValues());
+                $newFields[] = $newField;
+            } else {
+                $newFields[] = $field;
             }
-            $contact->setCustomFieldValues($newFields);
-            $arguments[0] = $contact;
         }
+        $contact->setCustomFieldValues($newFields);
+        $arguments[0] = $contact;
 
 
         if ('getByEmail' == $name) {
