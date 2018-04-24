@@ -86,9 +86,9 @@ class ContactsService
                     }
                     $newField->setValues($field->getValues());
                     $newFields[] = $newField;
-                } else {
+                } /*else {
                     $newFields[] = $field;
-                }
+                }*/
             }
             $contact->setCustomFieldValues($newFields);
             $arguments[$i] = $contact;
