@@ -11,7 +11,7 @@ class ApiException2 extends ApiException
      *
      * @Serializer\Type("array<string>")
      */
-    protected $context;
+    protected $context = [];
 
     /**
      * @return array|Context[]
@@ -29,5 +29,10 @@ class ApiException2 extends ApiException
     {
         $this->context = $context;
         return $this;
+    }
+
+    public function getContextAsString(): string
+    {
+        return implode('; ', $this->getContext());
     }
 }
