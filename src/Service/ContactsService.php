@@ -86,9 +86,12 @@ class ContactsService
                     }
                     $newField->setValues($field->getValues());
                     $newFields[] = $newField;
-                } /*else {
-                    $newFields[] = $field;
-                }*/
+                } else {
+//                    $newFields[] = $field;
+                    throw new \Exception(sprintf('Can not find ID for property %s',
+                            $field->getName())
+                    );
+                }
             }
             $contact->setCustomFieldValues($newFields);
             $arguments[$i] = $contact;
