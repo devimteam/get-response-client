@@ -105,4 +105,10 @@ class Context
         $this->errorDescription = $errorDescription;
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->validationType . ' ' . implode(' => ', $this->fieldName)
+            . ' = ' . $this->originalValue . ' : ' . $this->errorDescription;
+    }
 }

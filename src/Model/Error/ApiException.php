@@ -167,11 +167,6 @@ class ApiException extends \Exception
 
     public function getContextAsString(): string
     {
-        $r = "";
-        foreach ($this->getContext() as $item) {
-            $r .= implode(' => ', $item->getFieldName()) . " = " . $item->getOriginalValue()
-                . ' : ' . $item->getErrorDescription() . PHP_EOL;
-        }
-        return $r;
+        return implode(' ; ', $this->getContext());
     }
 }
