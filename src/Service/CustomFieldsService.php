@@ -14,7 +14,7 @@ use DevimTeam\GetResponseClient\ResourceDescription\CustomFieldsResource;
  * @method CustomField[] list()
  * @method CustomField get(string $id)
  * @method bool create(CustomField $customField)
- * @method CustomField update(string $id, CustomField $customField)
+ * @method CustomField update(CustomField $customField)
  * @method void delete(string $id)
  *
  * @method CustomField getByName(string $name)
@@ -57,20 +57,21 @@ class CustomFieldsService
 
     public function __call($name, $arguments)
     {
-//        print_r($arguments); die;
-
         if ('getByName' == $name && isset($this->fieldsCache[$arguments[0]])) {
             return $this->fieldsCache[$arguments[0]];
         }
 
-        /*if (!isset($arguments[0])) {
-            $arguments[0] = [];
-        }*/
-
         if ('getByName' == $name) {
             $build = $this->__getByName($arguments[0]);
+        } elseif ('update' == $name) {
+            $obj = $arguments[0];
+            if (!($obj instanceof CustomField))
+                throw new \Exception('Unexpected type: ' . gettype($obj));
+            $build = $this->resource->setCustomFields([
+                AbstractRESTResource::OPTION_IDENTIFIER_NAME => $obj->getCustomFieldId(),
+                AbstractRESTResource::OPTION_OBJECT_NAME => $obj,
+            ]);
         } else {
-//            $build = $this->resource->$name($arguments[0]);
             $build = call_user_func_array(
                 array($this->resource, $name),
                 $arguments

@@ -87,7 +87,6 @@ class ContactsService
                     $newField->setValues($field->getValues());
                     $newFields[] = $newField;
                 } else {
-//                    $newFields[] = $field;
                     throw new \Exception(sprintf('Can not find ID for property %s',
                             $field->getName())
                     );
@@ -100,10 +99,16 @@ class ContactsService
 
         if ('getByEmail' == $name) {
             $build = $this->__getByEmail($arguments[0]);
-        } elseif ('setCustomFields' == $name || 'update' == $name) {
+        } elseif (in_array($name, [
+            'setCustomFields',
+            'update',
+        ])) {
+            $obj = $arguments[0];
+            if (!($obj instanceof Contact))
+                throw new \Exception('Unexpected type: ' . gettype($obj));
             $build = $this->resource->setCustomFields([
-                AbstractRESTResource::OPTION_IDENTIFIER_NAME => $arguments[0]->getContactId(),
-                AbstractRESTResource::OPTION_OBJECT_NAME => $arguments[0],
+                AbstractRESTResource::OPTION_IDENTIFIER_NAME => $obj->getContactId(),
+                AbstractRESTResource::OPTION_OBJECT_NAME => $obj,
             ]);
         } else {
             $build = call_user_func_array(
