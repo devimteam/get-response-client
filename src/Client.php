@@ -15,13 +15,18 @@ class Client
     /** @var string */
     private $apiKey;
 
+    /** @var string */
+    private $xDomain;
+
     /**
      * Client constructor.
      * @param string $apiKey
+     * @param string $xDomain
      */
-    public function __construct($apiKey)
+    public function __construct($apiKey, $xDomain)
     {
         $this->apiKey = $apiKey;
+        $this->xDomain = $xDomain;
     }
 
     /**
@@ -48,10 +53,11 @@ class Client
 
         $ch = curl_init();
 
-        $url = 'https://api.getresponse.com/v3' . $url;
+        $url = 'http://api3.getresponse360.com/v3' . $url;
 
         $headers = [
             'X-Auth-Token: api-key ' . $this->apiKey,
+            'X-DOMAIN: ' . $this->xDomain,
         ];
 
         $queryStr = null;
