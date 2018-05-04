@@ -60,6 +60,7 @@ class ContactsService
      * @param string $name
      * @param array $arguments
      * @return mixed|null
+     * @throws \Exception
      * @throws \DevimTeam\GetResponseClient\Model\Error\ApiException
      * @throws \DevimTeam\GetResponseClient\Model\Error\ApiException2
      */
@@ -93,6 +94,13 @@ class ContactsService
                 }
             }
             $contact->setCustomFieldValues($newFields);
+            foreach ($contact->getCustomFieldValues() as $field) {
+                if (empty($field->getCustomFieldId())) {
+                    throw new \Exception(sprintf('Empty ID for property %s',
+                            $field->getName())
+                    );
+                }
+            }
             $arguments[$i] = $contact;
         }
 
