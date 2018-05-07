@@ -34,7 +34,7 @@ class Client
      * @return mixed
      * @throws ApiException
      * @throws ApiException2
-     *
+     * @throws RuntimeException
      */
     public function run($build)
     {
@@ -53,7 +53,8 @@ class Client
 
         $ch = curl_init();
 
-        $url = 'http://api3.getresponse360.com/v3' . $url;
+        $url = 'https://api.getresponse.com/v3' . $url;
+//        $url = 'http://api3.getresponse360.com/v3' . $url;
 
         $headers = [
             'X-Auth-Token: api-key ' . $this->apiKey,
@@ -121,6 +122,8 @@ class Client
         try {
             return $serializer->deserialize($output, $responseModelType, 'json');
         } catch (RuntimeException $exception) {
+//            var_dump($output);
+//            die();
             if (!in_array(
                 $responseCode,
                 self::HTTP_STATUS_CODES_IGNORE_MALFORMED_JSON_BODY
