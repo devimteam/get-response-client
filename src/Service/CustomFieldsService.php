@@ -111,7 +111,7 @@ class CustomFieldsService
         $all = $this->list();
         $res = [];
         foreach ($all as $field) {
-            $res[] = $field->getName();
+            $res[$field->getCustomFieldId()] = $field->getName();
         }
         return $res;
     }
