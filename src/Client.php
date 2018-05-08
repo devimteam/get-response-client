@@ -67,6 +67,7 @@ class Client
         if (count($parameters) > 0) {
             if ($method == ResourceDescriptionInterface::HTTP_METHOD_POST) {
                 $queryStr = $serializer->serialize($parameters, 'json', $serializerCtx);
+//                var_dump($queryStr);die;
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $queryStr);
                 $headers = array_merge($headers, array(
                     'Content-Type: application/json',
