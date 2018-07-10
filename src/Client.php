@@ -11,7 +11,7 @@ use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 class Client
 {
 //    const BASE_URL = 'https://api.getresponse.com/v3';
-    const BASE_URL = 'https://api3.getresponse360.com/v3';
+    const BASE_URL = 'https://api3.getresponse360.pl/v3';
 
     const HTTP_STATUS_CODES_IGNORE_MALFORMED_JSON_BODY = [200, 201, 202];
 
