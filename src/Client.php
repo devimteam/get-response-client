@@ -10,9 +10,6 @@ use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 
 class Client
 {
-//    const BASE_URL = 'https://api.getresponse.com/v3';
-    const BASE_URL = 'https://api3.getresponse360.pl/v3';
-
     const HTTP_STATUS_CODES_IGNORE_MALFORMED_JSON_BODY = [200, 201, 202];
 
     /** @var string */
@@ -21,16 +18,21 @@ class Client
     /** @var string */
     private $xDomain;
 
+    /** @var string */
+    private $baseUrl;
+
     /**
      * Client constructor.
      * @param string $apiKey
      * @param string $xDomain
+     * @param $baseUrl
      */
-    public function __construct($apiKey, $xDomain)
+    public function __construct($apiKey, $xDomain, $baseUrl)
     {
         $this->apiKey = $apiKey;
         $this->xDomain = $xDomain;
-    }
+        $this->baseUrl = $baseUrl;
+    $this->baseUrl = $baseUrl;}
 
     /**
      * @param $build
@@ -56,7 +58,7 @@ class Client
 
         $ch = curl_init();
 
-        $url = self::BASE_URL . $url;
+        $url = $this->baseUrl . $url;
 
         $headers = [
             'X-Auth-Token: api-key ' . $this->apiKey,
