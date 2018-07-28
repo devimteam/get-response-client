@@ -9,7 +9,7 @@ class ApiException2 extends ApiException
     /**
      * @var array
      *
-     * @Serializer\Type("array<string>")
+     * @Serializer\Type("array<DevimTeam\GetResponseClient\Model\Error\Context>")
      */
     protected $context = [];
 

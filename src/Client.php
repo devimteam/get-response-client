@@ -7,6 +7,8 @@ use DevimTeam\GetResponseClient\Model\Error\ApiException2;
 use JMS\Serializer\Exception\RuntimeException;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\SerializerBuilder;
 
 class Client
 {
@@ -32,7 +34,7 @@ class Client
         $this->apiKey = $apiKey;
         $this->xDomain = $xDomain;
         $this->baseUrl = $baseUrl;
-    $this->baseUrl = $baseUrl;}
+    }
 
     /**
      * @param $build
@@ -43,8 +45,8 @@ class Client
      */
     public function run($build)
     {
-        $serializerCtx = \JMS\Serializer\SerializationContext::create()->setSerializeNull(true);
-        $serializer = \JMS\Serializer\SerializerBuilder::create()
+        $serializerCtx = SerializationContext::create()->setSerializeNull(true);
+        $serializer = SerializerBuilder::create()
             ->setPropertyNamingStrategy(new SerializedNameAnnotationStrategy(
                 new IdenticalPropertyNamingStrategy()
             ))
