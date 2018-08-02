@@ -134,6 +134,20 @@ class Contact
     private $createdOn;
 
     /**
+     * @var string
+     *
+     * @Serializer\Type("string")
+     */
+    private $client_type;
+
+    /**
+     * @var string
+     *
+     * @Serializer\Type("string")
+     */
+    private $traffic_source;
+
+    /**
      * @return null|string
      */
     public function getContactId(): ?string
@@ -464,6 +478,42 @@ class Contact
     public function setNameMiddle(string $nameMiddle): Contact
     {
         $this->name_middle = $nameMiddle;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTrafficSource(): string
+    {
+        return $this->traffic_source;
+    }
+
+    /**
+     * @param string $trafficSource
+     * @return Contact
+     */
+    public function setTrafficSource(string $trafficSource): Contact
+    {
+        $this->traffic_source = $trafficSource;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientType(): string
+    {
+        return $this->client_type;
+    }
+
+    /**
+     * @param string $clientType
+     * @return Contact
+     */
+    public function setClientType(string $clientType): Contact
+    {
+        $this->client_type = $clientType;
         return $this;
     }
 }
