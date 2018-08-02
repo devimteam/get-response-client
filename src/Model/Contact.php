@@ -32,6 +32,20 @@ class Contact
      *
      * @Serializer\Type("string")
      */
+    private $name_first;
+
+    /**
+     * @var string
+     *
+     * @Serializer\Type("string")
+     */
+    private $name_middle;
+
+    /**
+     * @var string
+     *
+     * @Serializer\Type("string")
+     */
     private $email;
 
     /**
@@ -414,6 +428,42 @@ class Contact
     public function setCreatedOn(string $createdOn): Contact
     {
         $this->createdOn = $createdOn;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameFirst(): string
+    {
+        return $this->name_first;
+    }
+
+    /**
+     * @param string $nameFirst
+     * @return Contact
+     */
+    public function setNameFirst(string $nameFirst): Contact
+    {
+        $this->name_first = $nameFirst;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameMiddle(): string
+    {
+        return $this->name_middle;
+    }
+
+    /**
+     * @param string $nameMiddle
+     * @return Contact
+     */
+    public function setNameMiddle(string $nameMiddle): Contact
+    {
+        $this->name_middle = $nameMiddle;
         return $this;
     }
 }
