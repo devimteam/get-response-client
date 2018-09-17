@@ -20,7 +20,7 @@ use DevimTeam\GetResponseClient\ResourceDescription\ContactsResource;
  * @method Contact update(Contact $contact)
  * @method void delete(string $id)
  * @method Contact setCustomFields(Contact $contacts)
- * @method getWithoutStatus(int $cnt)
+ * @method array getWithoutStatus(int $cnt)
  *
  * @method Contact getByEmail(string $email)
  */

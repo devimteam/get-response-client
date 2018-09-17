@@ -89,7 +89,7 @@ class ContactsResource extends AbstractRESTResource
                ],
                'sectionLogicOperator' => 'or',
                'section' => [
-                   'logicOperator' => 'or',
+                   'logicOperator' => 'and',
                    'subscriberCycle' => [
                        'receiving_autoresponder',
                        'not_receiving_autoresponder'
