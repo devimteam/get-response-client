@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @package DevimTeam\GetResponseClient\Request
  *
  * @method  setCustomFields(array $options)
+ * @method  getWithoutStatus()
  */
 class ContactsResource extends AbstractRESTResource
 {
@@ -28,44 +29,84 @@ class ContactsResource extends AbstractRESTResource
 
     public function configureOptions(string $actionName, OptionsResolver $resolver): void
     {
-        if ('setCustomFields' == $actionName) {
+        if ('setCustomFields' === $actionName) {
             $resolver
                 ->setRequired(self::OPTION_IDENTIFIER_NAME)
                 ->setAllowedTypes(self::OPTION_IDENTIFIER_NAME, $this->getIdentifierTypes())
                 ->setRequired(self::OPTION_OBJECT_NAME)
                 ->setAllowedTypes(self::OPTION_OBJECT_NAME, $this->getObjectTypes($actionName));
-        } else {
-            parent::configureOptions($actionName, $resolver);
+
+            return;
         }
+        if ('getWithoutStatus' === $actionName) {
+            return;
+        }
+
+        parent::configureOptions($actionName, $resolver);
     }
 
     public function getUri(string $actionName, array $options = []): ?string
     {
-        if ('setCustomFields' == $actionName) {
+        if ('setCustomFields' === $actionName) {
             return sprintf(
                 '%s/%s/custom-fields',
                 $this->getUriPrefix(),
                 $options[self::OPTION_IDENTIFIER_NAME]
             );
-        } else {
-            return parent::getUri($actionName, $options);
         }
+
+        if ('getWithoutStatus' === $actionName) {
+            return '/search-contacts';
+        }
+
+        return parent::getUri($actionName, $options);
     }
 
     public function getHttpMethod(string $actionName, array $options = []): ?string
     {
-        if ('setCustomFields' == $actionName) {
+        if (\in_array($actionName, ['setCustomFields', 'getWithoutStatus'], true)) {
             return self::HTTP_METHOD_POST;
-        } else {
-            return parent::getHttpMethod($actionName);
         }
+
+        return parent::getHttpMethod($actionName);
     }
 
     public function getResponseModelType(string $actionName)
     {
-        if ('list' == $actionName) {
+        if ('list' === $actionName) {
             return sprintf('array<%s>', Contact::class);
         }
         return Contact::class;
+    }
+
+    public function getRequestParameters(string $actionName, array $options = [])
+    {
+        if ($actionName === 'getWithoutStatus') {
+           return [
+               'name' => 'contacts_without_status',
+               'subscribersType' => [
+                   'subscribed'
+               ],
+               'sectionLogicOperator' => 'or',
+               'section' => [
+                   'logicOperator' => 'or',
+                   'subscriberCycle' => [
+                       'receiving_autoresponder',
+                       'not_receiving_autoresponder'
+                   ],
+                   'subscriptionDate' => 'all_time',
+                   'conditions' => [
+                       [
+                           'conditionType' => 'custom',
+                           'operatorType' => 'string_operator',
+                           'operator' => 'not_assigned',
+                           'scope' => 'Z'
+                       ]
+                   ]
+               ]
+           ];
+        }
+
+        return parent::getRequestParameters($actionName, $options);
     }
 }

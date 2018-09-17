@@ -20,6 +20,7 @@ use DevimTeam\GetResponseClient\ResourceDescription\ContactsResource;
  * @method Contact update(Contact $contact)
  * @method void delete(string $id)
  * @method Contact setCustomFields(Contact $contacts)
+ * @method getWithoutStatus(int $cnt)
  *
  * @method Contact getByEmail(string $email)
  */
@@ -53,6 +54,16 @@ class ContactsService
         /** @var string $responseModelType */
         list($method, $url, $parameters, $responseModelType) = $this->resource->list();
         $parameters['query'] = ['email' => $email];
+        return [$method, $url, $parameters, $responseModelType];
+    }
+
+    private function __getWithoutStatus(int $cnt): array
+    {
+        /** @var string $method */
+        /** @var string $url */
+        /** @var mixed $parameters */
+        /** @var string $responseModelType */
+        list($method, $url, $parameters, $responseModelType) = $this->resource->getWithoutStatus();
         return [$method, $url, $parameters, $responseModelType];
     }
 
@@ -107,7 +118,9 @@ class ContactsService
 
         if ('getByEmail' == $name) {
             $build = $this->__getByEmail($arguments[0]);
-        } elseif (in_array($name, [
+        } elseif ('getWithoutStatus') {
+            $build = $this->__getWithoutStatus($arguments[0]);
+        } elseif (\in_array($name, [
             'setCustomFields',
             'update',
         ])) {
