@@ -100,7 +100,7 @@ class ContactsResource extends AbstractRESTResource
                            'conditionType' => 'custom',
                            'operatorType' => 'string_operator',
                            'operator' => 'not_assigned',
-                           'scope' => 'Z'
+                           'scope' => $options[0] ?? ''
                        ]
                    ]
                ]
