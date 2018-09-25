@@ -20,7 +20,7 @@ use DevimTeam\GetResponseClient\ResourceDescription\ContactsResource;
  * @method Contact update(Contact $contact)
  * @method void delete(string $id)
  * @method Contact setCustomFields(Contact $contacts)
- * @method array getWithoutStatus(int $cnt)
+ * @method array getWithoutCustomField(string $field, int $cnt)
  *
  * @method Contact getByEmail(string $email)
  */
@@ -57,13 +57,13 @@ class ContactsService
         return [$method, $url, $parameters, $responseModelType];
     }
 
-    private function __getWithoutStatus(int $cnt): array
+    private function __getWithoutCustomField(string $fieldScope, int $cnt): array
     {
         /** @var string $method */
         /** @var string $url */
         /** @var mixed $parameters */
         /** @var string $responseModelType */
-        list($method, $url, $parameters, $responseModelType) = $this->resource->getWithoutStatus();
+        list($method, $url, $parameters, $responseModelType) = $this->resource->getWithoutCustomField($fieldScope, $cnt);
         return [$method, $url, $parameters, $responseModelType];
     }
 
@@ -77,6 +77,9 @@ class ContactsService
      */
     public function __call($name, $arguments)
     {
+        // decorate custom fields with their ids
+        $fieldsService = new CustomFieldsService($this->client);
+
         for ($i = 0; $i < count($arguments); $i++) {
             if (!($arguments[$i] instanceof Contact)) {
                 continue;
@@ -84,9 +87,6 @@ class ContactsService
 
             /** @var Contact $contact */
             $contact = $arguments[$i];
-
-            // decorate custom fields with their ids
-            $fieldsService = new CustomFieldsService($this->client);
 
             $newFields = [];
             foreach ($contact->getCustomFieldValues() as $field) {
@@ -116,10 +116,16 @@ class ContactsService
         }
 
 
-        if ('getByEmail' == $name) {
+        if ('getByEmail' === $name) {
             $build = $this->__getByEmail($arguments[0]);
-        } elseif ('getWithoutStatus') {
-            $build = $this->__getWithoutStatus($arguments[0]);
+        } elseif ('getWithoutCustomField') {
+            $newField = $fieldsService->getByName($arguments[0]);
+            if ($field->getCustomFieldId() === null) {
+                throw new \Exception(sprintf('Empty ID for property %s',
+                        $field->getName())
+                );
+            }
+            $build = $this->__getWithoutCustomField($newField->getCustomFieldId(), $arguments[1]);
         } elseif (\in_array($name, [
             'setCustomFields',
             'update',
@@ -132,7 +138,7 @@ class ContactsService
                 AbstractRESTResource::OPTION_OBJECT_NAME => $obj,
             ]);
         } else {
-            $build = call_user_func_array(
+            $build = \call_user_func_array(
                 array($this->resource, $name),
                 $arguments
             );

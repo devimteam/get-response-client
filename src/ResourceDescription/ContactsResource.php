@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @package DevimTeam\GetResponseClient\Request
  *
  * @method  setCustomFields(array $options)
- * @method  getWithoutStatus()
+ * @method  getWithoutCustomField(string $fieldScope, int $cnt)
  */
 class ContactsResource extends AbstractRESTResource
 {
@@ -81,7 +81,7 @@ class ContactsResource extends AbstractRESTResource
 
     public function getRequestParameters(string $actionName, array $options = [])
     {
-        if ($actionName === 'getWithoutStatus') {
+        if ($actionName === 'getWithoutCustomField') {
            return [
                'name' => 'contacts_without_status',
                'subscribersType' => [
