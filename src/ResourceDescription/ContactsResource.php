@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @package DevimTeam\GetResponseClient\Request
  *
  * @method  setCustomFields(array $options)
- * @method  getWithoutCustomField(string $fieldScope, int $cnt)
+ * @method  getWithoutCustomField(string $fieldScope, string $comaignId, int $cnt)
  */
 class ContactsResource extends AbstractRESTResource
 {
@@ -82,29 +82,32 @@ class ContactsResource extends AbstractRESTResource
     public function getRequestParameters(string $actionName, array $options = [])
     {
         if ($actionName === 'getWithoutCustomField') {
-           return [
-               'name' => 'contacts_without_status',
-               'subscribersType' => [
-                   'subscribed'
-               ],
-               'sectionLogicOperator' => 'or',
-               'section' => [
-                   'logicOperator' => 'and',
-                   'subscriberCycle' => [
-                       'receiving_autoresponder',
-                       'not_receiving_autoresponder'
-                   ],
-                   'subscriptionDate' => 'all_time',
-                   'conditions' => [
-                       [
-                           'conditionType' => 'custom',
-                           'operatorType' => 'string_operator',
-                           'operator' => 'not_assigned',
-                           'scope' => $options[0] ?? ''
-                       ]
-                   ]
-               ]
-           ];
+            return [
+                'name'                 => 'contacts_without_status',
+                'subscribersType'      => [
+                    'subscribed'
+                ],
+                'sectionLogicOperator' => 'or',
+                'section'              => [
+                    'campaignIdsList'  => [
+                        $options[1]
+                    ],
+                    'logicOperator'    => 'and',
+                    'subscriberCycle'  => [
+                        'receiving_autoresponder',
+                        'not_receiving_autoresponder'
+                    ],
+                    'subscriptionDate' => 'all_time',
+                    'conditions'       => [
+                        [
+                            'conditionType' => 'custom',
+                            'operatorType'  => 'string_operator',
+                            'operator'      => 'not_assigned',
+                            'scope'         => $options[0] ?? ''
+                        ]
+                    ]
+                ]
+            ];
         }
 
         return parent::getRequestParameters($actionName, $options);

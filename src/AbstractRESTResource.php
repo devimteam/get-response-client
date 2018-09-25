@@ -119,6 +119,11 @@ abstract class AbstractRESTResource implements ResourceDescriptionInterface
             $options = [self::OPTION_OBJECT_NAME => $arguments[0]];
         } elseif (1 == count($arguments) && false == is_object($arguments[0])) {
             $options = [self::OPTION_IDENTIFIER_NAME => $arguments[0]];
+        } elseif (3 === \count($arguments)
+            && \is_string($arguments[0])
+            && \is_string($arguments[1])
+            && \is_int($arguments[2])) {
+            $options = $arguments;
         } else {
             $options = [];
         }

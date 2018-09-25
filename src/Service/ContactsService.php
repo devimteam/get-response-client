@@ -20,7 +20,7 @@ use DevimTeam\GetResponseClient\ResourceDescription\ContactsResource;
  * @method Contact update(Contact $contact)
  * @method void delete(string $id)
  * @method Contact setCustomFields(Contact $contacts)
- * @method array getWithoutCustomField(string $field, int $cnt)
+ * @method array getWithoutCustomField(string $field, string $campaignId, int $cnt)
  *
  * @method Contact getByEmail(string $email)
  */
@@ -57,13 +57,13 @@ class ContactsService
         return [$method, $url, $parameters, $responseModelType];
     }
 
-    private function __getWithoutCustomField(string $fieldScope, int $cnt): array
+    private function __getWithoutCustomField(string $fieldScope, string $campaignId, int $cnt): array
     {
         /** @var string $method */
         /** @var string $url */
         /** @var mixed $parameters */
         /** @var string $responseModelType */
-        list($method, $url, $parameters, $responseModelType) = $this->resource->getWithoutCustomField($fieldScope, $cnt);
+        list($method, $url, $parameters, $responseModelType) = $this->resource->getWithoutCustomField($fieldScope, $campaignId, $cnt);
         return [$method, $url, $parameters, $responseModelType];
     }
 
@@ -125,7 +125,7 @@ class ContactsService
                         $field->getName())
                 );
             }
-            $build = $this->__getWithoutCustomField($newField->getCustomFieldId(), $arguments[1]);
+            $build = $this->__getWithoutCustomField($newField->getCustomFieldId(), $arguments[1], $arguments[2]);
         } elseif (\in_array($name, [
             'setCustomFields',
             'update',
