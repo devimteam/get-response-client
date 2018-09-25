@@ -55,8 +55,8 @@ class ContactsResource extends AbstractRESTResource
             );
         }
 
-        if ('getWithoutStatus' === $actionName) {
-            return '/search-contacts';
+        if ('getWithoutCustomField' === $actionName) {
+            return '/search-contacts/';
         }
 
         return parent::getUri($actionName, $options);
@@ -64,7 +64,7 @@ class ContactsResource extends AbstractRESTResource
 
     public function getHttpMethod(string $actionName, array $options = []): ?string
     {
-        if (\in_array($actionName, ['setCustomFields', 'getWithoutStatus'], true)) {
+        if (\in_array($actionName, ['setCustomFields', 'getWithoutCustomField'], true)) {
             return self::HTTP_METHOD_POST;
         }
 
