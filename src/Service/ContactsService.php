@@ -120,7 +120,7 @@ class ContactsService
             $build = $this->__getByEmail($arguments[0]);
         } elseif ('getWithoutCustomField') {
             $newField = $fieldsService->getByName($arguments[0]);
-            if ($field->getCustomFieldId() === null) {
+            if ($newField->getCustomFieldId() === null) {
                 throw new \Exception(sprintf('Empty ID for property %s',
                         $field->getName())
                 );
