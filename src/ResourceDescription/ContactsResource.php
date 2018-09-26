@@ -56,7 +56,8 @@ class ContactsResource extends AbstractRESTResource
         }
 
         if ('getWithoutCustomField' === $actionName) {
-            return '/search-contacts/';
+            $cnt = $options[2] ?? 200;
+            return "/search-contacts?sort[createdOn]=asc&page=1&perPage{$cnt}";
         }
 
         return parent::getUri($actionName, $options);
@@ -83,14 +84,13 @@ class ContactsResource extends AbstractRESTResource
     {
         if ($actionName === 'getWithoutCustomField') {
             return [
-                'name'                 => 'contacts_without_status',
                 'subscribersType'      => [
                     'subscribed'
                 ],
                 'sectionLogicOperator' => 'or',
                 'section'              => [
                     'campaignIdsList'  => [
-                        $options[1]
+                        $options[1] ?? ''
                     ],
                     'logicOperator'    => 'and',
                     'subscriberCycle'  => [
