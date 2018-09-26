@@ -57,7 +57,7 @@ class ContactsResource extends AbstractRESTResource
 
         if ('getWithoutCustomField' === $actionName) {
             $cnt = $options[2] ?? 200;
-            return "/search-contacts?sort[createdOn]=asc&page=1&perPage{$cnt}";
+            return "/search-contacts/contacts?sort[createdOn]=asc&page=1&perPage={$cnt}";
         }
 
         return parent::getUri($actionName, $options);
