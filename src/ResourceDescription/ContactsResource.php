@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @package DevimTeam\GetResponseClient\Request
  *
  * @method  setCustomFields(array $options)
+ * @method  getWithoutCustomField(string $fieldScope, string $comaignId, int $cnt)
  */
 class ContactsResource extends AbstractRESTResource
 {
@@ -28,7 +29,7 @@ class ContactsResource extends AbstractRESTResource
 
     public function configureOptions(string $actionName, OptionsResolver $resolver): void
     {
-        if ('setCustomFields' == $actionName) {
+        if ('setCustomFields' === $actionName) {
             $resolver
                 ->setRequired(self::OPTION_IDENTIFIER_NAME)
                 ->setAllowedTypes(self::OPTION_IDENTIFIER_NAME, $this->getIdentifierTypes())
@@ -41,31 +42,70 @@ class ContactsResource extends AbstractRESTResource
 
     public function getUri(string $actionName, array $options = []): ?string
     {
-        if ('setCustomFields' == $actionName) {
+        if ('setCustomFields' === $actionName) {
             return sprintf(
                 '%s/%s/custom-fields',
                 $this->getUriPrefix(),
                 $options[self::OPTION_IDENTIFIER_NAME]
             );
-        } else {
-            return parent::getUri($actionName, $options);
         }
+
+        if ('getWithoutCustomField' === $actionName) {
+            $cnt = $options[2] ?? 200;
+            return "/search-contacts/contacts?sort[createdOn]=asc&page=1&perPage={$cnt}";
+        }
+
+        return parent::getUri($actionName, $options);
     }
 
     public function getHttpMethod(string $actionName, array $options = []): ?string
     {
-        if ('setCustomFields' == $actionName) {
+        if (\in_array($actionName, ['setCustomFields', 'getWithoutCustomField'], true)) {
             return self::HTTP_METHOD_POST;
-        } else {
-            return parent::getHttpMethod($actionName);
         }
+
+        return parent::getHttpMethod($actionName);
     }
 
     public function getResponseModelType(string $actionName)
     {
-        if ('list' == $actionName) {
+        if (\in_array($actionName, ['list', 'getWithoutCustomField'])) {
             return sprintf('array<%s>', Contact::class);
         }
+
         return Contact::class;
+    }
+
+    public function getRequestParameters(string $actionName, array $options = [])
+    {
+        if ($actionName === 'getWithoutCustomField') {
+            return [
+                'subscribersType'      => [
+                    'subscribed'
+                ],
+                'sectionLogicOperator' => 'or',
+                'section'              => [
+                    'campaignIdsList'  => [
+                        $options[1] ?? ''
+                    ],
+                    'logicOperator'    => 'and',
+                    'subscriberCycle'  => [
+                        'receiving_autoresponder',
+                        'not_receiving_autoresponder'
+                    ],
+                    'subscriptionDate' => 'all_time',
+                    'conditions'       => [
+                        [
+                            'conditionType' => 'custom',
+                            'operatorType'  => 'string_operator',
+                            'operator'      => 'not_assigned',
+                            'scope'         => $options[0] ?? ''
+                        ]
+                    ]
+                ]
+            ];
+        }
+
+        return parent::getRequestParameters($actionName, $options);
     }
 }
