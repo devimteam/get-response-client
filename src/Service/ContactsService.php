@@ -118,7 +118,7 @@ class ContactsService
 
         if ('getByEmail' === $name) {
             $build = $this->__getByEmail($arguments[0]);
-        } elseif ('getWithoutCustomField') {
+        } elseif ('getWithoutCustomField' === $name) {
             $newField = $fieldsService->getByName($arguments[0]);
             if ($newField->getCustomFieldId() === null) {
                 throw new \Exception(sprintf('Empty ID for property %s',
