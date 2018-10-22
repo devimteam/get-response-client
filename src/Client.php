@@ -83,6 +83,12 @@ class Client
             }
         }
 
+        if (count($parameters) === 0) {
+            if ($method === ResourceDescriptionInterface::HTTP_METHOD_DELETE) {
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+            }
+        }
+
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -127,6 +133,9 @@ class Client
         }
 
         try {
+            if ($method === ResourceDescriptionInterface::HTTP_METHOD_DELETE) {
+                return true;
+            }
             return $serializer->deserialize($output, $responseModelType, 'json');
         } catch (RuntimeException $exception) {
 //            var_dump($output);
