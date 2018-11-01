@@ -90,18 +90,15 @@ class ContactsService
 
             $newFields = [];
             foreach ($contact->getCustomFieldValues() as $field) {
-                if (empty($field->getCustomFieldId()) && !empty($field->getName())) {
+                if (!empty($field->getName())) {
                     $newField = $fieldsService->getByName($field->getName());
-                    if (null == $newField) {
-                        $newFields[] = $field;
-                        continue;
+                    if (null === $newField) {
+                        throw new \Exception(sprintf('Can not find ID for property %s',
+                                $field->getName())
+                        );
                     }
                     $newField->setValues($field->getValues());
                     $newFields[] = $newField;
-                } else {
-                    throw new \Exception(sprintf('Can not find ID for property %s',
-                            $field->getName())
-                    );
                 }
             }
             $contact->setCustomFieldValues($newFields);
