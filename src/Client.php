@@ -68,7 +68,7 @@ class Client
         ];
 
         $queryStr = null;
-        if (count($parameters) > 0) {
+        if ($parameters !== null) {
             if ($method == ResourceDescriptionInterface::HTTP_METHOD_POST) {
                 $queryStr = $serializer->serialize($parameters, 'json', $serializerCtx);
 //                var_dump($queryStr);die;
@@ -83,7 +83,7 @@ class Client
             }
         }
 
-        if (count($parameters) === 0) {
+        if ($parameters === null) {
             if ($method === ResourceDescriptionInterface::HTTP_METHOD_DELETE) {
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
             }
