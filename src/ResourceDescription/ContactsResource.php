@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @method  setCustomFields(array $options)
  * @method  getWithoutCustomField(string $fieldScope, string $comaignId, int $cnt)
+ * @method  getAll(string $campaignId, int $page, int $limit)
  */
 class ContactsResource extends AbstractRESTResource
 {
@@ -55,6 +56,13 @@ class ContactsResource extends AbstractRESTResource
             return "/search-contacts/contacts?sort[createdOn]=asc&page=1&perPage={$cnt}";
         }
 
+        if ('getAll' === $actionName) {
+            $campaignId = $options[0];
+            $page = $options[1];
+            $cnt = $options[2];
+            return '/contacts?query[campaignId]=' . $campaignId . '&sort[createdOn]=asc&page=' . $page . '&perPage=' . $cnt;
+        }
+
         return parent::getUri($actionName, $options);
     }
 
@@ -62,6 +70,10 @@ class ContactsResource extends AbstractRESTResource
     {
         if (\in_array($actionName, ['setCustomFields', 'getWithoutCustomField'], true)) {
             return self::HTTP_METHOD_POST;
+        }
+
+        if (\in_array($actionName, ['getAll'], true)) {
+            return self::HTTP_METHOD_GET;
         }
 
         return parent::getHttpMethod($actionName);
@@ -104,6 +116,10 @@ class ContactsResource extends AbstractRESTResource
                     ]
                 ]
             ];
+        }
+
+        if ($actionName === 'getAll') {
+            return null;
         }
 
         return parent::getRequestParameters($actionName, $options);

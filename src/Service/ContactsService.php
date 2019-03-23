@@ -63,7 +63,19 @@ class ContactsService
         /** @var string $url */
         /** @var mixed $parameters */
         /** @var string $responseModelType */
-        list($method, $url, $parameters, $responseModelType) = $this->resource->getWithoutCustomField($fieldScope, $campaignId, $cnt);
+        [$method, $url, $parameters, $responseModelType] = $this->resource->getWithoutCustomField($fieldScope, $campaignId, $cnt);
+
+        return [$method, $url, $parameters, $responseModelType];
+    }
+
+    private function __getAll(string $campaignId, int $page, int $limit): array
+    {
+        /** @var string $method */
+        /** @var string $url */
+        /** @var mixed $parameters */
+        /** @var string $responseModelType */
+        [$method, $url, $parameters, $responseModelType] = $this->resource->getAll($campaignId, $page, $limit);
+
         return [$method, $url, $parameters, $responseModelType];
     }
 
@@ -123,6 +135,8 @@ class ContactsService
                 );
             }
             $build = $this->__getWithoutCustomField($newField->getCustomFieldId(), $arguments[1], $arguments[2]);
+        } elseif ('getAll' === $name) {
+            $build = $this->__getAll($arguments[0], $arguments[1], $arguments[2]);
         } elseif (\in_array($name, [
             'setCustomFields',
             'update',
