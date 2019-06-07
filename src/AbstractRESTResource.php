@@ -124,6 +124,8 @@ abstract class AbstractRESTResource implements ResourceDescriptionInterface
             && \is_string($arguments[1])
             && \is_int($arguments[2])) {
             $options = $arguments;
+        } elseif ('getAll' === $name) {
+            $options = $arguments;
         } else {
             $options = [];
         }

@@ -81,7 +81,7 @@ class ContactsResource extends AbstractRESTResource
 
     public function getResponseModelType(string $actionName)
     {
-        if (\in_array($actionName, ['list', 'getWithoutCustomField'])) {
+        if (\in_array($actionName, ['list', 'getWithoutCustomField', 'getAll'])) {
             return sprintf('array<%s>', Contact::class);
         }
 
