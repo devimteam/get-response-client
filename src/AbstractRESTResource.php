@@ -98,6 +98,7 @@ abstract class AbstractRESTResource implements ResourceDescriptionInterface
         if (in_array($actionName, ['list', 'get', 'delete'])) {
             return null;
         }
+
         return $options[self::OPTION_OBJECT_NAME];
     }
 
